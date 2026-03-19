@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Pulse · Stateside</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --gold: #CDA349;
+    --blue: #0F03FB;
+    --red: #EA463D;
+    --grey1: #E8E8E8;
+    --grey3: #B9B9B9;
+    --grey5: #747474;
+    --grey7: #464646;
+    --grey9: #171717;
+    --bg: #F5F5F5;
+    --surface: #FFFFFF;
+    --ink: #000000;
+    --border: #E8E8E8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* GOLD PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* FIXED BLACK HEADER */
+  .site-header {
+    position: fixed;
+    top: 3px; left: 0; right: 0;
+    height: 52px;
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    z-index: 99;
+  }
+
+  .site-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-star {
+    width: 20px; height: 20px;
+    fill: var(--white);
+    flex-shrink: 0;
+  }
+
+  .logo-wordmark {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  /* LAYOUT */
+  .shell {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 55px 24px 80px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* COVER */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 0;
+  }
+
+  .cover-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  .cover-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: clamp(52px, 9vw, 84px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 24px;
+  }
+
+  .cover-title em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  .cover-rule {
+    width: 48px;
+    height: 3px;
+    background: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .cover-body {
+    font-size: 16px;
+    color: var(--grey7);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .cover-note {
+    background: var(--black);
+    border-left: 3px solid var(--gold);
+    padding: 18px 22px;
+    font-size: 13px;
+    color: var(--grey3);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .cover-note strong {
+    color: var(--gold);
+    font-weight: 600;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 10px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .cover-meta {
+    font-size: 10px;
+    color: var(--grey5);
+    margin-bottom: 36px;
+    letter-spacing: 2px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--black);
+    color: var(--white);
+    padding: 14px 32px;
+    border: 2px solid var(--black);
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--black);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--grey5);
+    border: 2px solid var(--grey3);
+  }
+
+  .btn-secondary:hover {
+    background: transparent;
+    border-color: var(--black);
+    color: var(--black);
+    transform: none;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  /* QUESTION SCREENS */
+  .q-screen {
+    padding-top: 64px;
+    min-height: 100vh;
+  }
+
+  .q-header {
+    margin-bottom: 44px;
+    border-left: 3px solid var(--gold);
+    padding-left: 20px;
+  }
+
+  .q-counter {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grey5);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .q-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: clamp(26px, 4vw, 40px);
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 10px;
+  }
+
+  .q-title em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  .q-subtitle {
+    font-size: 14px;
+    color: var(--grey5);
+    max-width: 480px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* INPUTS */
+  .field { margin-bottom: 28px; }
+
+  .field-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--grey5);
+    margin-bottom: 8px;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .field input[type="text"],
+  .field textarea {
+    width: 100%;
+    background: var(--surface);
+    border: none;
+    border-bottom: 2px solid var(--black);
+    padding: 14px 0 12px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+    background: transparent;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--gold);
+  }
+
+  .field textarea { min-height: 100px; }
+  .field textarea.tall { min-height: 140px; }
+
+  /* OPTIONS */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .option {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--grey7);
+    font-weight: 300;
+  }
+
+  .option:hover {
+    border-color: var(--black);
+    color: var(--black);
+  }
+
+  .option.selected {
+    border-color: var(--gold);
+    background: var(--black);
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  .option-dot {
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--grey3);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .option.selected .option-dot {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .option.selected .option-dot::after {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--black);
+  }
+
+  /* SCALE */
+  .scale-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .scale-btn {
+    flex: 1;
+    aspect-ratio: 1;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--grey5);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scale-btn:hover {
+    border-color: var(--black);
+    background: var(--grey1);
+    color: var(--black);
+  }
+
+  .scale-btn.selected {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--grey5);
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+  }
+
+  /* VALUE BLOCKS */
+  .value-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--black);
+    padding: 20px 22px;
+    margin-bottom: 10px;
+    transition: border-left-color 0.2s;
+  }
+
+  .value-block:focus-within { border-left-color: var(--gold); }
+
+  .value-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 4px;
+  }
+
+  .value-desc {
+    font-size: 12px;
+    color: var(--grey5);
+    margin-bottom: 14px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .value-block textarea {
+    width: 100%;
+    background: var(--bg);
+    border: none;
+    border-bottom: 1.5px solid var(--grey3);
+    padding: 10px 0 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 72px;
+    outline: none;
+    transition: border-bottom-color 0.2s;
+    background: transparent;
+  }
+
+  .value-block textarea:focus { border-bottom-color: var(--gold); }
+
+  .value-block-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--grey5);
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  /* CALLOUT NOTE */
+  .q-note {
+    background: var(--black);
+    border-left: 3px solid var(--red);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--grey3);
+    margin-bottom: 28px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* SECTION PILL */
+  .section-pill {
+    display: inline-block;
+    background: var(--black);
+    color: var(--gold);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    margin-bottom: 14px;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  /* THANK YOU */
+  .thankyou {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 0;
+  }
+
+  .thankyou-star {
+    width: 44px; height: 44px;
+    fill: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .thankyou-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: clamp(40px, 7vw, 72px);
+    line-height: 1.0;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: var(--black);
+  }
+
+  .thankyou-title em { font-style: normal; color: var(--gold); }
+
+  .thankyou-rule {
+    width: 48px; height: 3px;
+    background: var(--gold);
+    margin: 20px 0 24px;
+  }
+
+  .thankyou-body {
+    font-size: 16px;
+    color: var(--grey7);
+    max-width: 440px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .response-summary {
+    background: var(--black);
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+
+  .summary-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--grey5);
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .summary-value {
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .summary-score {
+    font-family: 'Oswald', sans-serif;
+    font-size: 40px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .score-denom {
+    font-size: 16px;
+    color: var(--grey5);
+  }
+
+  .copy-area {
+    background: var(--grey9);
+    padding: 20px;
+    margin-top: 24px;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--grey5);
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+    border-left: 3px solid var(--gold);
+  }
+
+  .copy-btn {
+    margin-top: 12px;
+    background: transparent;
+    border: 1.5px solid var(--grey7);
+    padding: 8px 20px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--grey5);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  @media (max-width: 600px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .scale-btn { font-size: 14px; }
+    .site-header { padding: 0 20px; }
+    .cover-meta { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-logo">
+    <svg class="logo-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35"/>
+    </svg>
+    <span class="logo-wordmark">Stateside</span>
+  </div>
+</header>
+
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+<div class="shell">
+
+  <!-- COVER -->
+  <div id="screen-cover" class="screen active">
+    <div class="cover">
+      <div class="cover-eyebrow">★ Stateside · Ops Team</div>
+      <h1 class="cover-title">Your honest<br>take on <em>us.</em></h1>
+      <div class="cover-rule"></div>
+      <p class="cover-body">This is a pulse survey for the Ops team. No trick questions, no right answers. Just an honest look at how we're doing — as a team and as a company.</p>
+      <div class="cover-note">
+        <strong>A note from me</strong>
+        I'm asking these questions because I genuinely want to understand your experience. Your answers will help me make Ops a better place to work. The more honest you are, the more useful this is. Please don't tell me what you think I want to hear.
+      </div>
+      <div class="cover-meta">
+        <span>⏱ ~10 min</span>
+        <span>📝 12 questions</span>
+        <span>🔒 Direct to your manager</span>
+      </div>
+      <button class="btn" onclick="startSurvey()">Let's go →</button>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div id="screen-q1" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="q-counter">Question 1 of 12</div>
+        <h2 class="q-title">What's your name?</h2>
+        <p class="q-subtitle">This helps me connect your responses to a real conversation with you.</p>
+      </div>
+      <div class="field">
+        <label class="field-label">Full name</label>
+        <input type="text" id="q1" placeholder="Your name here..." />
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="next(1)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div id="screen-q2" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Culture</div>
+        <div class="q-counter">Question 2 of 12</div>
+        <h2 class="q-title">Do you know Stateside's Core Values?</h2>
+        <p class="q-subtitle">No need to look them up — answer from memory.</p>
+      </div>
+      <div class="options-grid" style="grid-template-columns: 1fr;">
+        <div class="option" onclick="selectOption(this, 'q2', 'Yes — I know all 5 and could explain them')"><div class="option-dot"></div>Yes — I know all 5 and could explain them</div>
+        <div class="option" onclick="selectOption(this, 'q2', 'I know most of them but not all')"><div class="option-dot"></div>I know most of them but not all</div>
+        <div class="option" onclick="selectOption(this, 'q2', 'I know they exist but couldn\'t name them')"><div class="option-dot"></div>I know they exist but couldn't name them</div>
+        <div class="option" onclick="selectOption(this, 'q2', 'Honestly, no')"><div class="option-dot"></div>Honestly, no</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(2)">← Back</button>
+        <button class="btn" onclick="next(2)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div id="screen-q3" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Culture</div>
+        <div class="q-counter">Question 3 of 12</div>
+        <h2 class="q-title">Are the Core Values actually lived at Stateside?</h2>
+        <p class="q-subtitle">Not on paper — in day-to-day reality.</p>
+      </div>
+      <div class="options-grid" style="grid-template-columns: 1fr;">
+        <div class="option" onclick="selectOption(this, 'q3', 'Yes — I see them in action regularly')"><div class="option-dot"></div>Yes — I see them in action regularly</div>
+        <div class="option" onclick="selectOption(this, 'q3', 'Some of them, yes — others feel more like posters on the wall')"><div class="option-dot"></div>Some of them, yes — others feel more like posters on the wall</div>
+        <div class="option" onclick="selectOption(this, 'q3', 'Not consistently — depends on the day or the person')"><div class="option-dot"></div>Not consistently — depends on the day or the person</div>
+        <div class="option" onclick="selectOption(this, 'q3', 'Honestly, not much — they feel more aspirational than real')"><div class="option-dot"></div>Honestly, not much — they feel more aspirational than real</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(3)">← Back</button>
+        <button class="btn" onclick="next(3)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div id="screen-q4" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Culture</div>
+        <div class="q-counter">Question 4 of 12</div>
+        <h2 class="q-title">How do <em>you</em> live each value?</h2>
+        <p class="q-subtitle">Give a concrete example for each one. Honest and specific. If one doesn't apply to your role, say so.</p>
+      </div>
+      <div class="value-block">
+        <div class="value-name">We Own</div>
+        <div class="value-desc">We step up, follow through, and lead with accountability.</div>
+        <div class="value-block-label">How do you live this?</div>
+        <textarea id="q4_own" placeholder="Give a specific example from your work..."></textarea>
+      </div>
+      <div class="value-block">
+        <div class="value-name">We Deliver</div>
+        <div class="value-desc">Excellence isn't the exception — it's who we are, every day.</div>
+        <div class="value-block-label">How do you live this?</div>
+        <textarea id="q4_deliver" placeholder="Give a specific example from your work..."></textarea>
+      </div>
+      <div class="value-block">
+        <div class="value-name">We Risk</div>
+        <div class="value-desc">We challenge the norm and push beyond our comfort zone.</div>
+        <div class="value-block-label">How do you live this?</div>
+        <textarea id="q4_risk" placeholder="Give a specific example from your work..."></textarea>
+      </div>
+      <div class="value-block">
+        <div class="value-name">We Enjoy</div>
+        <div class="value-desc">Joy is part of performance. Good energy + Great people = Better results.</div>
+        <div class="value-block-label">How do you live this?</div>
+        <textarea id="q4_enjoy" placeholder="Give a specific example from your work..."></textarea>
+      </div>
+      <div class="value-block">
+        <div class="value-name">We Grow</div>
+        <div class="value-desc">As people, as professionals, as a team. Perpetually.</div>
+        <div class="value-block-label">How do you live this?</div>
+        <textarea id="q4_grow" placeholder="Give a specific example from your work..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(4)">← Back</button>
+        <button class="btn" onclick="next(4)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div id="screen-q5" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Experience</div>
+        <div class="q-counter">Question 5 of 12</div>
+        <h2 class="q-title">What do you love most about working at Stateside?</h2>
+        <p class="q-subtitle">What makes you glad you work here? What would you miss if you left?</p>
+      </div>
+      <div class="field">
+        <textarea id="q5" class="tall" placeholder="Be as specific as you can — the more specific, the more useful..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(5)">← Back</button>
+        <button class="btn" onclick="next(5)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div id="screen-q6" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Experience</div>
+        <div class="q-counter">Question 6 of 12</div>
+        <h2 class="q-title">What do you like <em>least</em> about working here?</h2>
+        <p class="q-subtitle">This is the most important question in the survey. Be honest. Vague answers help no one.</p>
+      </div>
+      <div class="q-note">If there's something that frustrates you, slows you down, or makes you feel undervalued — this is the place to say it. I'd rather hear it here than not at all.</div>
+      <div class="field">
+        <textarea id="q6" class="tall" placeholder="What would you change if you could? What's been bothering you?"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(6)">← Back</button>
+        <button class="btn" onclick="next(6)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div id="screen-q7" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Experience</div>
+        <div class="q-counter">Question 7 of 12</div>
+        <h2 class="q-title">If you could change one thing about how Ops works, what would it be?</h2>
+        <p class="q-subtitle">Process, communication, tools, team dynamics — anything goes.</p>
+      </div>
+      <div class="field">
+        <textarea id="q7" class="tall" placeholder="One specific thing you'd change or improve..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(7)">← Back</button>
+        <button class="btn" onclick="next(7)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div id="screen-q8" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Team</div>
+        <div class="q-counter">Question 8 of 12</div>
+        <h2 class="q-title">What does a high-performance team look like to you?</h2>
+        <p class="q-subtitle">Describe it from your own experience or ideal. What does it feel like to work in one?</p>
+      </div>
+      <div class="field">
+        <textarea id="q8" class="tall" placeholder="Describe what great looks like for you..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(8)">← Back</button>
+        <button class="btn" onclick="next(8)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div id="screen-q9" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Engagement</div>
+        <div class="q-counter">Question 9 of 12</div>
+        <h2 class="q-title">How engaged do you feel at work today?</h2>
+        <p class="q-subtitle">1 = Just going through the motions. 10 = Fully in, energized, proud to be here.</p>
+      </div>
+      <div class="scale-row" id="scale-q9">
+        <button class="scale-btn" onclick="selectScale(this,'q9',1)">1</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',2)">2</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',3)">3</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',4)">4</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',5)">5</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',6)">6</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',7)">7</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',8)">8</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',9)">9</button>
+        <button class="scale-btn" onclick="selectScale(this,'q9',10)">10</button>
+      </div>
+      <div class="scale-labels">
+        <span>Going through the motions</span>
+        <span>Fully in, energized, proud</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(9)">← Back</button>
+        <button class="btn" onclick="next(9)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div id="screen-q10" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Engagement</div>
+        <div class="q-counter">Question 10 of 12</div>
+        <h2 class="q-title">Why that number?</h2>
+        <p class="q-subtitle">What's driving your engagement level right now? What's contributing — and what's pulling it down?</p>
+      </div>
+      <div class="q-note">This is where the real answer lives. A "7" means nothing without context. Help me understand what's behind the number.</div>
+      <div class="field">
+        <textarea id="q10" class="tall" placeholder="What's making it higher or lower than you'd want it to be?"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(10)">← Back</button>
+        <button class="btn" onclick="next(10)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div id="screen-q11" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Engagement</div>
+        <div class="q-counter">Question 11 of 12</div>
+        <h2 class="q-title">What would make that number go up?</h2>
+        <p class="q-subtitle">What's one thing — from the team, from your manager, from the company — that would genuinely increase how engaged you feel?</p>
+      </div>
+      <div class="field">
+        <textarea id="q11" class="tall" placeholder="Be specific. What would actually move the needle for you?"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(11)">← Back</button>
+        <button class="btn" onclick="next(11)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div id="screen-q12" class="screen">
+    <div class="q-screen">
+      <div class="q-header">
+        <div class="section-pill">Open mic</div>
+        <div class="q-counter">Question 12 of 12</div>
+        <h2 class="q-title">Anything else you want me to know?</h2>
+        <p class="q-subtitle">Something you've been wanting to say. A thought that didn't fit anywhere else. An ask, a concern, a shout-out. The floor is yours.</p>
+      </div>
+      <div class="field">
+        <textarea id="q12" class="tall" placeholder="Optional — but often where the most important things get said."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary btn" onclick="back(12)">← Back</button>
+        <button class="btn" onclick="submit()">Submit my responses →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THANK YOU -->
+  <div id="screen-thanks" class="screen">
+    <div class="thankyou">
+      <svg class="thankyou-star" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35"/>
+      </svg>
+      <h2 class="thankyou-title">Thank you<br>for being <em>real.</em></h2>
+      <div class="thankyou-rule"></div>
+      <p class="thankyou-body">Your responses have been saved. I'll read every word carefully — and I'll follow up with you directly to close the loop on what I hear.</p>
+      <div class="response-summary" id="responseSummary"></div>
+      <div>
+        <p style="font-size:10px;color:var(--grey5);margin-bottom:8px;text-transform:uppercase;letter-spacing:2px;font-family:'Oswald',sans-serif;">Copy your responses to save:</p>
+        <div class="copy-area" id="copyArea"></div>
+        <button class="copy-btn" onclick="copyResponses()">Copy all responses</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const responses = {};
+  const total = 12;
+
+  function updateProgress(step) {
+    document.getElementById('progressBar').style.width = Math.round((step/total)*100)+'%';
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function startSurvey() { showScreen('screen-q1'); updateProgress(0); }
+
+  function selectOption(el, key, value) {
+    el.closest('.options-grid,.q-screen').querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+    responses[key] = value;
+  }
+
+  function selectScale(el, key, value) {
+    document.querySelectorAll('#scale-'+key+' .scale-btn').forEach(b=>b.classList.remove('selected'));
+    el.classList.add('selected');
+    responses[key] = value;
+  }
+
+  function getVal(id) {
+    const el = document.getElementById(id);
+    if (!el) return responses[id]||'';
+    return el.value ? el.value.trim() : (responses[id]||'');
+  }
+
+  function next(step) {
+    if (step===1) responses.q1=getVal('q1');
+    if (step===4) { responses.q4_own=getVal('q4_own'); responses.q4_deliver=getVal('q4_deliver'); responses.q4_risk=getVal('q4_risk'); responses.q4_enjoy=getVal('q4_enjoy'); responses.q4_grow=getVal('q4_grow'); }
+    if ([5,6,7,8,10,11,12].includes(step)) responses['q'+step]=getVal('q'+step);
+    updateProgress(step);
+    showScreen('screen-q'+(step+1));
+  }
+
+  function back(step) {
+    updateProgress(step-2);
+    showScreen('screen-q'+(step-1));
+  }
+
+  function submit() {
+    responses.q12=getVal('q12');
+    updateProgress(12);
+    const name=responses.q1||'Anonymous';
+    const score=responses.q9||'—';
+    document.getElementById('responseSummary').innerHTML=`
+      <div class="summary-label">Respondent</div>
+      <div class="summary-value" style="font-family:'Oswald',sans-serif;font-size:20px;letter-spacing:2px;text-transform:uppercase;">${name}</div>
+      <div class="summary-label" style="margin-top:16px;">Engagement Score</div>
+      <div class="summary-score">${score}<span class="score-denom"> / 10</span></div>
+      <div class="summary-label" style="margin-top:16px;">Values awareness</div>
+      <div class="summary-value">${responses.q2||'—'}</div>
+    `;
+    const lines=[
+      'STATESIDE TEAM PULSE SURVEY',
+      'Submitted: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+      '','01. NAME',responses.q1||'(not answered)',
+      '','02. KNOWS CORE VALUES?',responses.q2||'(not answered)',
+      '','03. ARE VALUES LIVED?',responses.q3||'(not answered)',
+      '','04. HOW I LIVE EACH VALUE',
+      '  We Own: '+(responses.q4_own||'—'),
+      '  We Deliver: '+(responses.q4_deliver||'—'),
+      '  We Risk: '+(responses.q4_risk||'—'),
+      '  We Enjoy: '+(responses.q4_enjoy||'—'),
+      '  We Grow: '+(responses.q4_grow||'—'),
+      '','05. WHAT I LOVE MOST',responses.q5||'(not answered)',
+      '','06. WHAT I LIKE LEAST',responses.q6||'(not answered)',
+      '','07. WHAT I\'D CHANGE IN OPS',responses.q7||'(not answered)',
+      '','08. HIGH-PERFORMANCE TEAM',responses.q8||'(not answered)',
+      '','09. ENGAGEMENT SCORE',(responses.q9||'—')+' / 10',
+      '','10. WHY THAT NUMBER?',responses.q10||'(not answered)',
+      '','11. WHAT WOULD RAISE IT?',responses.q11||'(not answered)',
+      '','12. OPEN MIC',responses.q12||'(not answered)',
+    ];
+    document.getElementById('copyArea').textContent=lines.join('\n');
+    showScreen('screen-thanks');
+  }
+
+  function copyResponses() {
+    navigator.clipboard.writeText(document.getElementById('copyArea').textContent).then(()=>{
+      const btn=document.querySelector('.copy-btn');
+      btn.textContent='✓ Copied!';
+      setTimeout(()=>btn.textContent='Copy all responses',2000);
+    });
+  }
+</script>
+</body>
+</html>
